@@ -2,6 +2,7 @@
 using UnityEngine.Audio;  //引用 音頻 api
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,6 +21,29 @@ public class GameManager : MonoBehaviour
     }
    public void play()
     {
-        SceneManager.LoadScene("場經");
+        //SceneManager.LoadScene("場經");
+        StartCoroutine(Loading());
+    }
+
+    private IEnumerator Loading()
+    {
+        //print("TEST 1");
+        //yield return new WaitForSeconds(1);
+        //print("TEST 2");
+
+        AsyncOperation ao = SceneManager.LoadSceneAsync("場經");
+        ao.allowSceneActivation = false;
+
+        while (ao.isDone == false)
+        {
+            textloading.text = ((ao.progress / 0.9f) * 100).ToString();
+            loading.value = ao.progress / 0.9f;
+            yield return new WaitForSeconds(0.0001f);
+
+            if (ao.progress == 0.9f)
+            {
+                ao.allowSceneActivation = true;
+            }
+        }
     }
 }
