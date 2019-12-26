@@ -7,7 +7,9 @@ using System.Collections;
 public class GameManager : MonoBehaviour
 {
    public AudioMixer mixer;
+
    public Text textloading;
+
    public Slider loading;
 
 
@@ -15,10 +17,12 @@ public class GameManager : MonoBehaviour
     {
         mixer.SetFloat("vbgm", value);
     }
+
    public void Setvsfx(float value)
     {
         mixer.SetFloat("vsfx", value);
     }
+
    public void play()
     {
         //SceneManager.LoadScene("場經");
@@ -31,7 +35,7 @@ public class GameManager : MonoBehaviour
         //yield return new WaitForSeconds(1);
         //print("TEST 2");
 
-        AsyncOperation ao = SceneManager.LoadSceneAsync("場經");
+        AsyncOperation ao = SceneManager.LoadSceneAsync("遊戲場景");
         ao.allowSceneActivation = false;
 
         while (ao.isDone == false)
@@ -45,5 +49,15 @@ public class GameManager : MonoBehaviour
                 ao.allowSceneActivation = true;
             }
         }
+    }
+
+    public void Replay()
+    {
+        SceneManager.LoadScene("介面");
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 }

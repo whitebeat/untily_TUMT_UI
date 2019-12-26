@@ -16,6 +16,11 @@ public class player : MonoBehaviour
     public Text textTime;
     public float gameTime;
 
+    [Header("結束畫布")]
+    public GameObject final;
+    public Text textBest;
+    public Text textCurrent;
+
     public Text TextMaki
     {
         get
@@ -38,6 +43,8 @@ public class player : MonoBehaviour
             int d = other.GetComponent<trap>().damage;
             hp -= d;
             slider.value = hp;
+            if (hp <= 0) Dead();
+
 
         }
         if (other.tag == "Maki")
@@ -48,9 +55,11 @@ public class player : MonoBehaviour
         }
         if (other.name =="總點" && MakiCount == MakiTotal)
         {
-            print("過關");
+            GameOver();
         }
     }
+
+
     private void OnParticleCollision(GameObject other)
     {
         if (other.tag == "陷阱")
@@ -58,14 +67,21 @@ public class player : MonoBehaviour
             int d = other.GetComponent<trap>().damage;
             hp -= d;
             slider.value = hp;
+            if (hp <= 0) Dead();
 
         }
        
        
     }
 
+
     private void Start()
     {
+        if(PlayerPrefs.GetFloat("最佳紀錄") == 0)
+        {
+            PlayerPrefs.SetFloat("最佳紀錄", 999999);
+        }
+
         MakiTotal = GameObject.FindGameObjectsWithTag("Maki").Length;
         textMaki.text = "Maki:0/" + MakiTotal;
     }
@@ -74,9 +90,33 @@ public class player : MonoBehaviour
     {
         UpdateTime();
     }
+
     private void UpdateTime()
     {
         gameTime += Time.deltaTime;
         textTime.text = gameTime.ToString("F2");
     }
+
+    private void Dead()
+    {
+        final.SetActive(true);
+        textCurrent.text = "TIME : " + gameTime.ToString("F2");
+        textBest.text = "BEST" + PlayerPrefs.GetFloat("最佳紀錄").ToString("F2");
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void GameOver()
+    {
+        final.SetActive(true);
+        textCurrent.text = "TIME : " + gameTime.ToString("F2");
+
+        if (gameTime < PlayerPrefs.GetFloat("最佳紀錄"))
+        {
+            PlayerPrefs.SetFloat("最佳紀錄", gameTime);
+        }
+        textBest.text = "BEST" + PlayerPrefs.GetFloat("最佳紀錄").ToString("F2");
+
+        Cursor.lockState = CursorLockMode.None;
+    }
+
 }
