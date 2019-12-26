@@ -103,6 +103,9 @@ public class player : MonoBehaviour
         textCurrent.text = "TIME : " + gameTime.ToString("F2");
         textBest.text = "BEST" + PlayerPrefs.GetFloat("最佳紀錄").ToString("F2");
         Cursor.lockState = CursorLockMode.None;
+
+        GetComponent<FPSControllerLPFP.FpsControllerLPFP>().enabled = false;
+        enabled = false;
     }
 
     private void GameOver()
@@ -117,6 +120,7 @@ public class player : MonoBehaviour
         textBest.text = "BEST" + PlayerPrefs.GetFloat("最佳紀錄").ToString("F2");
 
         Cursor.lockState = CursorLockMode.None;
+
     }
 
 }
